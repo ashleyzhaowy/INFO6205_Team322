@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Random;
+import java.util.logging.Level;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 
@@ -27,23 +28,23 @@ public class GeneticAlgorithm {
     private List<Chromosome> newpopulation;
     private int popSize;
     private int cityNum;
-    private int MAX_GEN; // Generation 运行代数  
+    private int MAX_GEN; // 运行代数  
     private float len_p;
     private float price_p;
-    private int[][] distance; // Distance matrix 距离矩阵  
-    private int bestT;// Generatoin where the best fit is最佳出现代数 
+    private int[][] distance; // 距离矩阵  
+    private int bestT;// 最佳出现代数 
     private Chromosome bestChromosome;
-    private double totalFintness;
-    private double[] Pi;// cumulative probability of each individual in the population 种群中各个个体的累计概率  
-    private float Pc;// crossover probability交叉概率  
-    private float Pm;// Mutation Probability
-    private int t;// Current Generation 当前代数  
+    private float eachGBestChromosomefitness;
+    private double[] Pi;// 种群中各个个体的累计概率  
+    private float Pc;// 交叉概率  
+    private float Pm;// 变异概率  
+    private int t;// 当前代数  
     private Random random;
      
     public static Logger logger1 = LogManager.getLogger(GeneticAlgorithm.class.getName());
    
     public GeneticAlgorithm(int popSize, float Pc, float Pm, int MAX_GEN, int cityNum, String filename,
-            float len_p, float price_p) throws IOException {
+        float len_p, float price_p) throws IOException {
         logger1.info("Build GeneticAlgorithm");
         this.Pc = Pc;
         this.MAX_GEN = MAX_GEN;
@@ -57,8 +58,8 @@ public class GeneticAlgorithm {
         Pi = new double[popSize];
         oldpopulation = new ArrayList<>();
         newpopulation = new ArrayList<>();
+        eachGBestChromosomefitness = 0;
         bestT = 0;
-        totalFintness = 0;
         initGA(filename);
       }
 
@@ -70,26 +71,25 @@ public class GeneticAlgorithm {
         for (int i = 0; i < cityNum; i++) {
             strbuff = data.readLine();
             String[] strcol = strbuff.split(",");
-            distance[i][0] = Integer.valueOf(strcol[0]);// x coordinate x坐标  
-            distance[i][1] = Integer.valueOf(strcol[1]);// y coordinate y坐标  
+            distance[i][0] = Integer.valueOf(strcol[0]);// x坐标  
+            distance[i][1] = Integer.valueOf(strcol[1]);// y坐标  
         }
     }
 
 //init population
-    private void initPop() {
-         logger1.info("Initialize the population. The population is: "+popSize);
+    public void initPop() {
+       logger1.info("Initialize the population. The population is: "+popSize);
         for (int i = 0; i < popSize; i++) {
             Chromosome chromosome = new Chromosome();
             chromosome.calculatefitness(distance, len_p, price_p); 
-            totalFintness +=chromosome.getFitness();
             oldpopulation.add(chromosome);
         }
-          bestChromosome = oldpopulation.get(0);
+        bestChromosome = oldpopulation.get(0);
 
     }
 
 //find each generation best chromosome, sort all the chromosome
-    private void selectBestchromosoem() {
+    public void selectBestchromosoem() {
        
         PriorityQueue<Chromosome> chromosomes = new PriorityQueue<>();
         for (Chromosome c : oldpopulation) {
@@ -100,7 +100,7 @@ public class GeneticAlgorithm {
             bestChromosome = chromosome;
             bestT =t;
         }
-        
+        eachGBestChromosomefitness = chromosome.getFitness();
         Chromosome bstchromosome = new Chromosome();
         bstchromosome.setFitness((float) chromosome.getFitness());
         bstchromosome.setGene(chromosome.getGene());
@@ -113,7 +113,7 @@ public class GeneticAlgorithm {
     }
 
 //select other parent to the new population
-    private void selectOtherChromosomeTonewPop() {
+    public void selectOtherChromosomeTonewPop() {
        
         double ran;
         for (int i = 1; i < popSize; i++) {
@@ -135,9 +135,9 @@ public class GeneticAlgorithm {
     }
 
 //count rate
-    private void countRate() {
+    public void countRate() {
         int i = 0;
-        double sumFitness = 0;// The sum of fitness 适应度总和 
+        double sumFitness = 0;// 适应度总和 
         double[] temp = new double[popSize];
         for (Chromosome c : oldpopulation) {
             temp[i] = 100.0 / c.getFitness();
@@ -151,12 +151,12 @@ public class GeneticAlgorithm {
     }
 
 //crrosover
-    private void crossOver(Chromosome c1, Chromosome c2) {
+    public void crossOver(Chromosome c1, Chromosome c2) {
       
-        int a = random.nextInt(1000) % (c1.getGene().length / 2);
-        int b = random.nextInt(1000) % (c2.getGene().length / 2);
+        int a = random.nextInt(1000) % (c1.getGene().length);
+        int b = random.nextInt(1000) % (c2.getGene().length);
         while (a == b) {
-            b = random.nextInt(1000) % (c2.getGene().length / 2);
+            b = random.nextInt(1000) % (c2.getGene().length);
         }
         int min = a > b ? b : a;
         int max = a > b ? a : b;
@@ -167,19 +167,6 @@ public class GeneticAlgorithm {
             c2.getGene()[i] = temp;
         }
 
-        a = random.nextInt(1000) % (c1.getGene().length / 2) + (c1.getGene().length / 2);
-        b = random.nextInt(1000) % (c2.getGene().length / 2) + (c1.getGene().length / 2);
-        while (a == b) {
-            b = random.nextInt(1000) % (c2.getGene().length / 2) + (c1.getGene().length / 2);
-        }
-        min = a > b ? b : a;
-        max = a > b ? a : b;
-
-        for (int i = min; i <= max; i++) {
-            int temp = c1.getGene()[i];
-            c1.getGene()[i] = c2.getGene()[i];
-            c2.getGene()[i] = temp;
-        }
 
         c1.changeXY();
         c1.calculatefitness(distance, len_p, price_p);
@@ -188,7 +175,7 @@ public class GeneticAlgorithm {
     }
 
 //Variation
-    private void Variation(Chromosome c) {
+    public void Variation(Chromosome c) {
         int r = random.nextInt(1000) % (c.getGene().length);
 
         if (c.getGene()[r] == 0) {
@@ -200,21 +187,16 @@ public class GeneticAlgorithm {
         c.calculatefitness(distance, len_p, price_p);
     }
 
-  private  void eachGenTotalfitness(){
-      totalFintness = 0;
-      for (Chromosome chromosome : newpopulation) {
-       totalFintness += chromosome.getFitness();   
-      }
-  }
+ 
     
 //evolution
     private void evolution() {
 //select the best chromosome and doesn't to use for crrosover
-        logger1.info("Select the best individual in this generation");
+         logger1.info("Select the best individual in this generation");
         selectBestchromosoem();
 
 //select other popsize-1 chromosome to newpopulation
-        logger1.info("Using natural selection to choose the parents of next generation");
+         logger1.info("Using natural selection to choose the parents of next generation");
         selectOtherChromosomeTonewPop();
 
 //operation
@@ -222,63 +204,67 @@ public class GeneticAlgorithm {
         int i;
         logger1.info("Use hybridization and mutation to produce next generation");
         for (i = 1; i + 1 < newpopulation.size(); i += 2) {
-            p = random.nextFloat();// /generate random probability产生概率 
+            p = random.nextFloat();// /产生概率 
             if (p < Pc) {
                 crossOver(newpopulation.get(i), newpopulation.get(i + 1));
             }
-            p = random.nextFloat();// /generate random probability产生概率 
+            p = random.nextFloat();// /产生概率 
             if (p < Pm) {
 
                 Variation(newpopulation.get(i));
             }
 
-            p = random.nextFloat();// /generate random probability 产生概率 
+            p = random.nextFloat();// /产生概率 
             if (p < Pm) {
 
                 Variation(newpopulation.get(i + 1));
             }
         }
 
-        if (i == popSize - 1)// If the last chromosome left does not cross L-1 如果剩最后一个染色体没有交叉L-1  
+        if (i == popSize - 1)// 剩最后一个染色体没有交叉L-1  
         {
-            p = random.nextFloat();// /generate random probability 产生概率  
+            p = random.nextFloat();// /产生概率  
             if (p < Pm) {
                 Variation(newpopulation.get(i));
             }
         }
         
-       eachGenTotalfitness();
+       
     }
 
 //solve the GA 
-    public void progress() {
-
+    private void progress() {
 //init population
         initPop();
 
         countRate();
-        logger1.info("Info of each Chromosome");
+        logger1.info("info of each Chromosome from init Population");
         for (Chromosome chromosome : oldpopulation) {
         logger1.info("x: " + chromosome.getX() + " y: " + chromosome.getY());
-        logger1.info("Distance to each city：" + chromosome.getTotaldistance() + " Distance to first city：" + 
-                chromosome.getTofirstcity() + " Chromosome fitness is： " + chromosome.getFitness());  
+        logger1.info("The sum distance to each city：" + chromosome.getTotaldistance() + " Distance to first city：" + 
+         chromosome.getTofirstcity() + " Chromosome fitness is： " + chromosome.getFitness());  
         }
-        logger1.info("Total chromosome fitness is：" + totalFintness);
+    
         for (t = 1; t <= MAX_GEN; t++) {
-            //evolution
-            logger1.info("From the" + t + " Generation");
+           //evolution
+           
+           
+         
+           logger1.info( "The "+ (t-1) + " generation best chromosome is: " + eachGBestChromosomefitness);
+           logger1.info("The " + t + " generation evolution start");
+           eachGBestChromosomefitness = 0;
             evolution();
-            
+          
             logger1.info("The" + t + "generation's evolution is completed");
             logger1.info("Info of each Chromosome");
             
             for (Chromosome chromosome : newpopulation) {
                  logger1.info("x: " + chromosome.getX() + " y: " + chromosome.getY());
-                 logger1.info("Distance to each city：" + chromosome.getTotaldistance() + " Distance to first city：" + 
+                 logger1.info("The sum distance to each city：" + chromosome.getTotaldistance() + " Distance to first city：" + 
                  chromosome.getTofirstcity() + " Chromosome fitness： " + chromosome.getFitness());  
-           }
+            }
            
-           logger1.info("Total chromosome fitness：" + totalFintness);
+           
            oldpopulation.clear();
            oldpopulation = new ArrayList<Chromosome>(newpopulation);
             
@@ -287,31 +273,31 @@ public class GeneticAlgorithm {
             countRate();
         }
 
-        System.out.println(" LAST GENERATION ");
-        System.out.println(" ");
-
-        System.out.println("The Generation of the most fit chromosome generates at：");
-        System.out.println("the  " + bestT + "  generation");
-        System.out.println("The most fit x is: ");
-        System.out.println(bestChromosome.getX());
-        System.out.println("The most fit y is：");
-        System.out.println(bestChromosome.getY());
-        System.out.println("Best fitness value is ：");
-        System.out.println(bestChromosome.getFitness());
-        System.out.println("The distance sum to each city is(km)：");
-        System.out.println(bestChromosome.getTotaldistance());
-        System.out.println("The distance to Vegetable Base is(km)：");
-        System.out.println(bestChromosome.getTofirstcity());
+        System.out.println("From these 1500 generation we can get the Result as follows: ");
+        System.out.println("");
+        
+        System.out.println("The Generation of the most fit chromosome generates at：" + bestT);
+        System.out.println("The most fit x is: " +bestChromosome.getX());
+        System.out.println("The most fit y is：" +bestChromosome.getY());
+        System.out.println("Best fitness value is ：" +bestChromosome.getFitness());
+        System.out.println("The distance sum to each city is(km)：" +bestChromosome.getTotaldistance());
+        System.out.println("The distance to Vegetable Base is(km)："+bestChromosome.getTofirstcity());
        
+        
+
   
     }
     
     
     //main
-     public static void main(String[] args) throws IOException {
+     public static void main(String[] args)  {
         
-     GeneticAlgorithm ga = new GeneticAlgorithm(20, (float)0.8, (float)0.2,200 ,5, "Distaance.txt", (float)0.7, (float)0.3);
-     ga.progress();
+        try {
+            GeneticAlgorithm ga = new GeneticAlgorithm(30, (float)0.8, (float)0.1,1500 ,11, "Distance.txt", (float)0.7, (float)0.3);
+            ga.progress();
+        } catch (IOException ex) {
+            java.util.logging.Logger.getLogger(GeneticAlgorithm.class.getName()).log(Level.SEVERE, null, ex);
+        }
      
           
     }

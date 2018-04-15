@@ -50,10 +50,7 @@ public void calculatefitness(int[][] distance,float len_p,float price_p) {
     setTofirstcity(getTotaldistance());
     }
     }
-    setFitness((getTotaldistance()*len_p + getTofirstcity() *price_p)/10000);
-    
-//    setFitness((float) (getTotaldistance() * len_p));
-//    setFitness((float) (getFitness() + getTofirstcity() *price_p));   
+    setFitness((getTotaldistance()*len_p + getTofirstcity() *price_p)/100);
 }
 
 public void changeXY(){
