@@ -1,6 +1,7 @@
+
 Problem  
 We created a genetic algorithm to find a solution to the Warehouse Location Selection Problem.
+
 The problem poses the situation: 
-We want to build a vegetable base to distribute fresh vegetables to 20 cities in China. And the closer to big cities like Beijing, 
-the cost will be higher. Also, we also want that the distance sum can be as low as possible to ensure the freshness of vegetables and 
-lower transportation cost.
+
+We want to build a vegetable base to distribute fresh vegetables to 20 cities in China. And the closer to big cities like Beijing, the cost will be higher. Also, we want the distance sum from vegetable base to each city can be as low as possible to ensure the freshness of vegetables and lower transportation cost.
