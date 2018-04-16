@@ -28,17 +28,17 @@ public class GeneticAlgorithm {
     private List<Chromosome> newpopulation;
     private int popSize;
     private int cityNum;
-    private int MAX_GEN; // max generation 运行代数  
+    private int MAX_GEN; // max generation  
     private float len_p;
     private float price_p;
-    private int[][] distance; // distance matrix距离矩阵  
-    private int bestT;// generation where chromosome shows最佳出现代数 
+    private int[][] distance; // distance matrix 
+    private int bestT;// generation where chromosome shows
     private Chromosome bestChromosome;
     private float eachGBestChromosomefitness;
-    private double[] Pi;// 种群中各个个体的累计概率  
-    private float Pc;// 交叉概率  
-    private float Pm;// 变异概率  
-    private int t;// 当前代数  
+    private double[] Pi;//The cumulative probability of each individual in the population 
+    private float Pc; //crossing over probability 
+    private float Pm; //mutation probability 
+    private int t; //current generation 
     private Random random;
      
     public static Logger logger1 = LogManager.getLogger(GeneticAlgorithm.class.getName());
@@ -144,7 +144,7 @@ oldpopulation.add(chromosome1);
 //count rate
     public void countRate() {
         int i = 0;
-        double sumFitness = 0;// fitness sum适应度总和 
+        double sumFitness = 0;// fitness sum 
         double[] temp = new double[popSize];
         for (Chromosome c : oldpopulation) {
             temp[i] = 100.0 / c.getFitness();
@@ -213,26 +213,26 @@ oldpopulation.add(chromosome1);
         int i;
         logger1.info("Use hybridization and mutation to produce next generation");
         for (i = 1; i + 1 < newpopulation.size(); i += 2) {
-            p = random.nextFloat();// /产生概率 
+            p = random.nextFloat();// generate random probability
             if (p < Pc) {
                 crossOver(newpopulation.get(i), newpopulation.get(i + 1));
             }
-            p = random.nextFloat();// /产生概率 
+            p = random.nextFloat();//generate random probability
             if (p < Pm) {
 
                 Variation(newpopulation.get(i));
             }
 
-            p = random.nextFloat();// /产生概率 
+            p = random.nextFloat();// generate random probability
             if (p < Pm) {
 
                 Variation(newpopulation.get(i + 1));
             }
         }
 
-        if (i == popSize - 1)// 剩最后一个染色体没有交叉L-1  
+        if (i == popSize - 1)//  if there left a chromosome
         {
-            p = random.nextFloat();// /产生概率  
+            p = random.nextFloat();// generate random probability
             if (p < Pm) {
                 Variation(newpopulation.get(i));
             }
