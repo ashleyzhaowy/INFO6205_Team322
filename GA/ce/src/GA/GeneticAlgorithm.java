@@ -28,11 +28,11 @@ public class GeneticAlgorithm {
     private List<Chromosome> newpopulation;
     private int popSize;
     private int cityNum;
-    private int MAX_GEN; // 运行代数  
+    private int MAX_GEN; // max generation 运行代数  
     private float len_p;
     private float price_p;
-    private int[][] distance; // 距离矩阵  
-    private int bestT;// 最佳出现代数 
+    private int[][] distance; // distance matrix距离矩阵  
+    private int bestT;// generation where chromosome shows最佳出现代数 
     private Chromosome bestChromosome;
     private float eachGBestChromosomefitness;
     private double[] Pi;// 种群中各个个体的累计概率  
@@ -71,8 +71,8 @@ public class GeneticAlgorithm {
         for (int i = 0; i < cityNum; i++) {
             strbuff = data.readLine();
             String[] strcol = strbuff.split(",");
-            distance[i][0] = Integer.valueOf(strcol[0]);// x坐标  
-            distance[i][1] = Integer.valueOf(strcol[1]);// y坐标  
+            distance[i][0] = Integer.valueOf(strcol[0]);// x coordinate  
+            distance[i][1] = Integer.valueOf(strcol[1]);// y coordinate  
         }
     }
 
@@ -109,6 +109,13 @@ public class GeneticAlgorithm {
         bstchromosome.setTofirstcity(chromosome.getTofirstcity());
         bstchromosome.setTotaldistance(chromosome.getTotaldistance());
         newpopulation.add(bstchromosome);
+//remove all chromosome
+oldpopulation.clear();
+oldpopulation.add(chromosome);
+
+for(Chromosome chromosome1: chromosomes){
+oldpopulation.add(chromosome1);
+}
 
     }
 
@@ -137,7 +144,7 @@ public class GeneticAlgorithm {
 //count rate
     public void countRate() {
         int i = 0;
-        double sumFitness = 0;// 适应度总和 
+        double sumFitness = 0;// fitness sum适应度总和 
         double[] temp = new double[popSize];
         for (Chromosome c : oldpopulation) {
             temp[i] = 100.0 / c.getFitness();
@@ -194,6 +201,8 @@ public class GeneticAlgorithm {
 //select the best chromosome and doesn't to use for crrosover
          logger1.info("Select the best individual in this generation");
         selectBestchromosoem();
+        
+        countRate();
 
 //select other popsize-1 chromosome to newpopulation
          logger1.info("Using natural selection to choose the parents of next generation");
@@ -270,10 +279,10 @@ public class GeneticAlgorithm {
             
             //replace the newpopulation with oldpopulation
             newpopulation.clear();
-            countRate();
+            
         }
 
-        System.out.println("From these 1500 generation we can get the Result as follows: ");
+        System.out.println("From these 1500 generations' evolution we can get the result as follows: ");
         System.out.println("");
         
         System.out.println("The Generation of the most fit chromosome generates at：" + bestT);

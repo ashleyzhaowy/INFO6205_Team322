@@ -1,4 +1,13 @@
-ProblemWe want to set up a vegetable transfer station between vegetable base A and cities: B, C, D, E, F, G, H, I, G, K. The transfer station should meet the following requirements as much as possible:（1）In order to save transportation costs, the distance between the transfer station and the vegetable base A and various locations should be as small as possible（2）In order to save the cost of construction fee, the transfer station should be as closer to the vegetable base as possible, because the closer the transfer station is to the city, the higher will construction cost rise.
+
+
+Problem
+We want to set up a vegetable transfer station between vegetable base A and cities: B, C, D, E, F, G, H, I, G, K. The transfer station should meet the following requirements as much as possible:（1）In order to save transportation costs, the distance between the transfer station and the vegetable base A and various locations should be as small as possible（2）In order to save the cost of construction fee, the transfer station should be as closer to the vegetable base as possible, because the closer the transfer station is to the city, the higher will construction cost rise.
+
+We submitted report for more other details.
+
+And you will need to import log4j-1.2.15.jar to run this application.
+
+It is in GA folder.
 
 Team Member:
 Kun Du, Wenyin Zhao
