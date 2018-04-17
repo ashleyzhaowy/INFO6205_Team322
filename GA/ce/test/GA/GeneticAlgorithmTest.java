@@ -23,7 +23,7 @@ public class GeneticAlgorithmTest {
     /**
      * Test of progress method, of class GeneticAlgorithm.
      */
-    
+ int[][] distance = {{20,50},{120,30},{200,90},{400,580},{420,800},{180,150},{350,270},{800,1000},{650,40},{900,100},{550,260}};  
  
  private Object getProp(Object o,String propName) throws Exception{
  Field field = o.getClass().getDeclaredField(propName);
@@ -36,7 +36,7 @@ public class GeneticAlgorithmTest {
     //test initPop
    @Test
     public  void  testinitPop() throws Exception{
-    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, "Distance.txt", (float)0.7, (float)0.3);
+    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, distance, (float)0.7, (float)0.3);
     instance.initPop();
     List<Chromosome> l = (List<Chromosome>) getProp(instance, "oldpopulation");
     assertEquals(l.size(), 10);
@@ -45,7 +45,7 @@ public class GeneticAlgorithmTest {
  
     @Test
     public  void  testSelectBestchromosoem() throws Exception{
-    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, "Distance.txt", (float)0.7, (float)0.3);
+    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, distance, (float)0.7, (float)0.3);
      
     instance.initPop();
     instance.selectBestchromosoem();
@@ -63,7 +63,7 @@ public class GeneticAlgorithmTest {
     
     @Test
     public void testCountRate() throws Exception {
-    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, "Distance.txt", (float)0.7, (float)0.3);
+    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, distance, (float)0.7, (float)0.3);
     instance.initPop();
     instance.countRate();
     
@@ -75,7 +75,7 @@ public class GeneticAlgorithmTest {
     
    @Test
    public  void testSelectOtherChromosomeTonewPop() throws Exception{
-   GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, "Distance.txt", (float)0.7, (float)0.3);
+   GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, distance, (float)0.7, (float)0.3);
    instance.initPop();
    instance.countRate();
    instance.selectBestchromosoem();
@@ -87,7 +87,7 @@ public class GeneticAlgorithmTest {
    
    @Test
     public void TestcrossOver() throws Exception {
-    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5, "Distance.txt", (float)0.7, (float)0.3);
+    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.8, (float)0.2,50 ,5,distance, (float)0.7, (float)0.3);
     int[][] distance = (int[][]) getProp(instance, "distance");
     Chromosome c1 = new Chromosome();
     c1.calculatefitness(distance, (float)0.7,  (float)0.3);
@@ -107,7 +107,7 @@ public class GeneticAlgorithmTest {
     
    @Test
     public void testVariation() throws Exception{
-    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.6, (float)0.2,50 ,5, "Distance.txt", (float)0.7, (float)0.3);
+    GeneticAlgorithm instance = new GeneticAlgorithm(10, (float)0.6, (float)0.2,50 ,5, distance, (float)0.7, (float)0.3);
     int[][] distance = (int[][]) getProp(instance, "distance");
     Chromosome c1 = new Chromosome();
     c1.calculatefitness(distance, (float)0.7,  (float)0.3); 

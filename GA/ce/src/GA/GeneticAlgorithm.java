@@ -43,8 +43,8 @@ public class GeneticAlgorithm {
      
     public static Logger logger1 = LogManager.getLogger(GeneticAlgorithm.class.getName());
    
-    public GeneticAlgorithm(int popSize, float Pc, float Pm, int MAX_GEN, int cityNum, String filename,
-        float len_p, float price_p) throws IOException {
+    public GeneticAlgorithm(int popSize, float Pc, float Pm, int MAX_GEN, int cityNum, int [][] distance,
+        float len_p, float price_p)  {
         logger1.info("Build GeneticAlgorithm");
         this.Pc = Pc;
         this.MAX_GEN = MAX_GEN;
@@ -53,6 +53,7 @@ public class GeneticAlgorithm {
         this.cityNum = cityNum;
         this.len_p = len_p;
         this.price_p = price_p;
+        this.distance = distance;
         distance = new int[cityNum][2];
         random = new Random(System.currentTimeMillis());
         Pi = new double[popSize];
@@ -60,7 +61,8 @@ public class GeneticAlgorithm {
         newpopulation = new ArrayList<>();
         eachGBestChromosomefitness = 0;
         bestT = 0;
-        initGA(filename);
+       // initGA(filename);
+      
       }
 
     private void initGA(String filename) throws FileNotFoundException, IOException {
@@ -301,13 +303,13 @@ oldpopulation.add(chromosome1);
     //main
      public static void main(String[] args)  {
         
-        try {
-            GeneticAlgorithm ga = new GeneticAlgorithm(30, (float)0.8, (float)0.1,1500 ,11, "Distance.txt", (float)0.7, (float)0.3);
+       
+        	
+        	int[][] distance = {{20,50},{120,30},{200,90},{400,580},{420,800},{180,150},{350,270},{800,1000},{650,40},{900,100},{550,260}};
+        	    
+            GeneticAlgorithm ga = new GeneticAlgorithm(30, (float)0.8, (float)0.1,1500 ,11, distance, (float)0.7, (float)0.3);
             ga.progress();
-        } catch (IOException ex) {
-            java.util.logging.Logger.getLogger(GeneticAlgorithm.class.getName()).log(Level.SEVERE, null, ex);
-        }
-     
+       
           
     }
     
