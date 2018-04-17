@@ -4,8 +4,7 @@ The commit on 4/16/2018 ONLY changed data import method(from .txt file to distan
 
 Now it can run on BOTH Netbeans or Eclipse.
 
-NOTICE: If you run on Netbeans, you will still need to import jar manually (we tried path reading to be more convenient for you 
-but didn't work it out).
+NOTICE: If you run on Netbeans, you will still need to import jar manually (we tried path reading to be more convenient for you but didn't work it out).
 
 The jar file is in GA folder.
 --------------------------------------------------------
@@ -14,11 +13,9 @@ Problem : Location Selection Problem
 We want to set up a vegetable transfer station between vegetable base A and cities: B, C, D, E, F, G, H, I, G, K. 
 The transfer station should meet the following requirements as much as possible:
 
-（1）In order to save transportation costs, the distance between the transfer station and the vegetable base A 
-and various locations should be as small as possible
+（1）In order to save transportation costs, the distance between the transfer station and the vegetable base A and various locations should be as small as possible
 
-（2）In order to save the cost of construction fee, the transfer station should be as closer to the vegetable base as possible, 
-because the closer the transfer station is to the city, the higher will construction cost rise.
+（2）In order to save the cost of construction fee, the transfer station should be as closer to the vegetable base as possible, because the closer the transfer station is to the city, the higher will construction cost rise.
 
 We submitted a report for more other details.
 
