@@ -1,4 +1,13 @@
 
+------------------------------------------------------
+The commit on 4/16/2018 only changed data import method(from .txt file to distance[][]). 
+
+Now it can run on BOTH Netbeans or Eclipse.
+
+NOTICE: If you run on Netbeans, you will still need to import jar manually (we tried path to be more convenient for you but didn't work it out).
+
+The jar file is in GA folder.
+--------------------------------------------------------
 Problem : Location Selection Problem
 
 We want to set up a vegetable transfer station between vegetable base A and cities: B, C, D, E, F, G, H, I, G, K. 
@@ -14,6 +23,9 @@ And you will need to import log4j-1.2.15.jar to run this application.
 
 The jar file is in GA folder.
 
-Team Member:
+
+Team 322
+Members:
 Kun Du, Wenyin Zhao
+
 
